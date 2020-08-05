@@ -18,6 +18,7 @@ import com.bruce.intellijplugin.generatesetter.Parameters;
 import com.bruce.intellijplugin.generatesetter.utils.PsiToolUtils;
 import com.google.common.collect.Sets;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +30,7 @@ public class SetReturnTypeHandler implements ComplexReturnTypeHandler {
 
     @NotNull
     @Override
-    public InsertDto handle(Parameters returnParamInfo, String splitText, PsiParameter[] parameters, boolean hasGuava) {
+    public InsertDto handle(Parameters returnParamInfo, PsiClassImpl psiClass, String splitText, PsiParameter[] parameters, boolean hasGuava) {
         InsertDto insertDto = new InsertDto();
         String returnVariableName = "";
         StringBuilder insertText = new StringBuilder();

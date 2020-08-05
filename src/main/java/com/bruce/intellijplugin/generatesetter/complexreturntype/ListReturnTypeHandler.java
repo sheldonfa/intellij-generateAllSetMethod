@@ -18,6 +18,7 @@ import com.bruce.intellijplugin.generatesetter.Parameters;
 import com.bruce.intellijplugin.generatesetter.utils.PsiToolUtils;
 import com.google.common.collect.Sets;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,30 +30,12 @@ public class ListReturnTypeHandler implements ComplexReturnTypeHandler {
 
     @NotNull
     @Override
-    public InsertDto handle(Parameters returnParamInfo, String splitText, PsiParameter[] parameters, boolean hasGuava) {
+    public InsertDto handle(Parameters returnParamInfo, PsiClassImpl psiClass , String splitText, PsiParameter[] parameters, boolean hasGuava) {
         InsertDto insertDto = new InsertDto();
+        insertDto.setImportList(Sets.newHashSet("import java.util.stream.Collectors;"));
         String returnVariableName = "";
         StringBuilder insertText = new StringBuilder();
         insertText.append(splitText);
-        if (returnParamInfo.getParams().size() > 0) {
-            String realName = returnParamInfo.getParams().get(0).getRealName();
-            returnVariableName = PsiToolUtils.lowerStart(realName) + "list";
-            insertText.append("List<").append(realName)
-                    .append("> " + returnVariableName).append("=");
-        } else {
-            returnVariableName = "list";
-            insertText.append("List " + returnVariableName + "=");
-        }
-
-        if (hasGuava) {
-            insertText.append("Lists.newArrayList();");
-            insertDto.setImportList(Sets.newHashSet("com.google.common.collect.Lists"));
-        } else {
-            insertText.append("new ArrayList<>();");
-            insertDto.setImportList(Sets.newHashSet("java.util.ArrayList"));
-        }
-        //check if parameter containList ect, to build with it.
-
         ListParamInfo paramInfo = null;
         for (PsiParameter parameter : parameters) {
 //            todo for array class how to fix it.
@@ -78,17 +61,16 @@ public class ListReturnTypeHandler implements ComplexReturnTypeHandler {
         if (paramInfo != null) {
             String realType = paramInfo.getRealType();
             String varName = PsiToolUtils.lowerStart(paramInfo.getRealType());
-            String methodName = "convertTo";
+            String methodName = "to";
             if (returnParamInfo.getParams().size() > 0) {
                 methodName = methodName + returnParamInfo.getParams().get(0).getRealName();
             }
-            System.out.println(splitText);
-            insertText.append(splitText + "for (" + realType + " " + varName + " :" + paramInfo.getParamName() + ") {");
-            insertText.append(splitText + "\t" + returnVariableName + ".add(" + methodName + "(" + varName + "));");
-            insertText.append(splitText + "}");
+            // 修改为 stream方式
+//            insertText.append(splitText + "for (" + realType + " " + varName + " :" + paramInfo.getParamName() + ") {");
+//            insertText.append(splitText + "\t" + returnVariableName + ".add(" + methodName + "(" + varName + "));");
+//            insertText.append(splitText + "}");
+            insertText.append("return "+paramInfo.getParamName()+".stream().map("+psiClass.getName()+"::"+methodName+").collect(Collectors.toList());");
         }
-        insertText.append(splitText + "return " + returnVariableName + ";");
-
         insertDto.setAddedText(insertText.toString());
         return insertDto;
     }

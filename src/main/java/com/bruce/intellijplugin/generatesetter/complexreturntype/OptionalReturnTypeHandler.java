@@ -16,6 +16,7 @@ package com.bruce.intellijplugin.generatesetter.complexreturntype;
 
 import com.bruce.intellijplugin.generatesetter.Parameters;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,7 +29,7 @@ public class OptionalReturnTypeHandler implements ComplexReturnTypeHandler {
 
     @NotNull
     @Override
-    public InsertDto handle(Parameters returnParamInfo, String splitText, PsiParameter[] parameters, boolean hasGuava) {
+    public InsertDto handle(Parameters returnParamInfo, PsiClassImpl psiClass, String splitText, PsiParameter[] parameters, boolean hasGuava) {
         return null;
     }
 }

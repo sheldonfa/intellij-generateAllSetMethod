@@ -29,6 +29,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -171,11 +172,12 @@ public abstract class GenerateAllSetterBase extends PsiElementBaseIntentionActio
         InsertDto dto = null;
         boolean hasGuava = PsiToolUtils.checkGuavaExist(project, element);
         if (returnTypeInfo.getCollectPackege() != null
-                && handlerMap.containsKey(returnTypeInfo.getCollectPackege())) {
-            //
+                && handlerMap.containsKey(returnTypeInfo.getCollectPackege())
+                && method.getParent() instanceof PsiClassImpl) {
             dto = handlerMap.get(returnTypeInfo.getCollectPackege()).handle(
-                    returnTypeInfo, splitText,
-                    method.getParameterList().getParameters(), hasGuava);
+                    returnTypeInfo, (PsiClassImpl) method.getParent(), splitText,
+                    method.getParameterList().getParameters(),
+                    hasGuava);
         } else {
             PsiClass returnTypeClass = PsiTypesUtil
                     .getPsiClass(method.getReturnType());
