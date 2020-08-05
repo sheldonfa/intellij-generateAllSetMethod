@@ -78,9 +78,13 @@ public class ListReturnTypeHandler implements ComplexReturnTypeHandler {
         if (paramInfo != null) {
             String realType = paramInfo.getRealType();
             String varName = PsiToolUtils.lowerStart(paramInfo.getRealType());
+            String methodName = "convertTo";
+            if (returnParamInfo.getParams().size() > 0) {
+                methodName = methodName + returnParamInfo.getParams().get(0).getRealName();
+            }
             System.out.println(splitText);
             insertText.append(splitText + "for (" + realType + " " + varName + " :" + paramInfo.getParamName() + ") {");
-            insertText.append(splitText + "\t" + returnVariableName + ".add(convertFrom" + realType + "(" + varName + "));");
+            insertText.append(splitText + "\t" + returnVariableName + ".add(" + methodName + "(" + varName + "));");
             insertText.append(splitText + "}");
         }
         insertText.append(splitText + "return " + returnVariableName + ";");
