@@ -1,6 +1,6 @@
 <idea-plugin version="2">
     <id>com.bruce.intellijplugin.generatesetter</id>
-    <name>GenerateAllSetter</name>
+    <name>GenerateAllSetter_mine</name>
     <vendor email="gejun123456@gmail.com" url="https://github.com/gejun123456/intellij-generateAllSetMethod">bruceGe</vendor>
     <description><![CDATA[
 
