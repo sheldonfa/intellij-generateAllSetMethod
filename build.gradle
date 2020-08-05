@@ -32,7 +32,7 @@ intellij {
 //    IC-2016.1
 //    version 'IU-2018.3' //IntelliJ IDEA dependency
     plugins 'coverage' //Bundled plugin dependencies
-    pluginName 'GenerateAllSetter_my'
+    pluginName 'GenerateAllSetter'
     updateSinceUntilBuild false
 //    需要来填写publish这块 类似
 //    publish {
